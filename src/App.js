@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
 
-function App() {
+const Counter = ({ counter }) => {
+  return <div className="counter">COUNTER: {counter}</div>;
+};
+
+const Buttons = ({ clickerFn }) => {
+  const handleClick = (e, adder) => {
+    clickerFn(adder);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="btn-group">
+      <button
+        className="btn btn-success click-btn up"
+        onClick={(e) => handleClick(e, 1)}>
+        INCREASE
+      </button>
+      <button
+        className="btn btn-danger click-btn down"
+        onClick={(e) => handleClick(e, -1)}>
+        DECREASE
+      </button>
     </div>
   );
-}
+};
+
+const App = () => {
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    console.log("useEffect");
+  }, [counter]);
+
+  const catchClick = (data) => {
+    setCounter((prev) => prev + data);
+    setCounter((prev) => prev + data);
+  };
+
+  return (
+    <>
+      <Counter counter={counter} />
+      <Buttons clickerFn={catchClick} />
+    </>
+  );
+};
 
 export default App;
