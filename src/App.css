@@ -22,3 +22,15 @@
 .click-btn:focus {
   outline: none;
 }
+
+.type-btn {
+  margin: 4px;
+}
+
+.type,
+.counter,
+.renders {
+  text-transform: uppercase;
+  margin-top: 15px;
+  margin-left: 4px;
+}

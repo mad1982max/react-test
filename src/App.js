@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 const Counter = ({ counter }) => {
@@ -26,22 +26,70 @@ const Buttons = ({ clickerFn }) => {
   );
 };
 
-const App = () => {
-  const [counter, setCounter] = useState(0);
+const Users = () => {
+  const [type, setType] = useState("users");
+  const [data, setData] = useState([]);
+  const rendCount = useRef(1);
 
   useEffect(() => {
-    console.log("useEffect");
-  }, [counter]);
+    console.log("effect");
+    fetch(`https://jsonplaceholder.typicode.com/${type}`)
+      .then((response) => response.json())
+      .then((json) => {
+        setData(json);
+        console.log(type, ": ", json.length);
+        rendCount.current++;
+      });
+  }, [type]);
+
+  return (
+    <>
+      <div className="renders">Renders (users' comp): {rendCount.current}</div>
+      <div className="type">{type.toUpperCase()}</div>
+      <div className="btn-group">
+        <button
+          className="btn btn-warning type-btn"
+          onClick={(e) => setType("users")}>
+          users
+        </button>
+        <button
+          className="btn btn-warning type-btn"
+          onClick={(e) => setType("todos")}>
+          todos
+        </button>
+        <button
+          className="btn btn-warning type-btn"
+          onClick={(e) => setType("posts")}>
+          posts
+        </button>
+      </div>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </>
+  );
+};
+
+const App = () => {
+  const initState = () => {
+    // console.log("...setInit");
+    return Math.trunc(Math.random() * 20);
+  };
+
+  const [counter, setCounter] = useState(() => initState());
+
+  useEffect(() => {
+    // console.log("useEffect");
+  });
 
   const catchClick = (data) => {
     setCounter((prev) => prev + data);
-    setCounter((prev) => prev + data);
+    // console.log("...setState");
   };
 
   return (
     <>
       <Counter counter={counter} />
       <Buttons clickerFn={catchClick} />
+      <Users />
     </>
   );
 };
